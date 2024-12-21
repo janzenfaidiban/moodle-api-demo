@@ -11,7 +11,7 @@
   <script>
     async function fetchCourseDetail() {
       const params = new URLSearchParams(window.location.search);
-      const courseId = params.get('id'); // Ambil ID kursus dari URL
+      const courseId = params.get('id');
       if (!courseId) {
         document.getElementById('course-detail').innerHTML = '<p>ID kursus tidak ditemukan.</p>';
         return;
@@ -28,7 +28,7 @@
         const response = await fetch(`${moodleUrl}?${apiParams.toString()}`);
         if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
         const courses = await response.json();
-        const course = courses.find(c => c.id == courseId); // Cari kursus berdasarkan ID
+        const course = courses.find(c => c.id == courseId);
         if (!course) {
           document.getElementById('course-detail').innerHTML = '<p>Kursus tidak ditemukan.</p>';
           return;
@@ -41,12 +41,17 @@
     }
 
     function displayCourseDetail(course) {
+      const courseImage = course.courseimageurl ? 
+                          `<img src="${course.courseimageurl}" class="img-fluid mb-4" alt="Image for ${course.fullname}">` :
+                          `<img src="https://via.placeholder.com/150" class="img-fluid mb-4" alt="Image not available">`;
+
       const courseDetail = `
         <div class="card">
           <div class="card-header">
             <h5>${course.fullname}</h5>
           </div>
           <div class="card-body">
+            ${courseImage}
             <p><strong>ID:</strong> ${course.id}</p>
             <p><strong>Short Name:</strong> ${course.shortname}</p>
             <p><strong>Summary:</strong> ${course.summary || 'Tidak ada deskripsi.'}</p>
